@@ -57,16 +57,25 @@ export async function getStaticProps(req) {
   }
 
   // 生成robotTxt
-  generateRobotsTxt(props)
+  // Vercel生产环境文件系统是只读的，跳过文件生成
+  if (process.env.VERCEL !== '1' || process.env.NODE_ENV !== 'production') {
+    generateRobotsTxt(props)
+  }
   // 生成Feed订阅
-  generateRss(props)
-  // 生成
-  generateSitemapXml(props)
+  if (process.env.VERCEL !== '1' || process.env.NODE_ENV !== 'production') {
+    generateRss(props)
+  }
+  // 生成sitemap
+  if (process.env.VERCEL !== '1' || process.env.NODE_ENV !== 'production') {
+    generateSitemapXml(props)
+  }
   // 检查数据是否需要从algolia删除
   checkDataFromAlgolia(props)
   if (siteConfig('UUID_REDIRECT', false, props?.NOTION_CONFIG)) {
     // 生成重定向 JSON
-    generateRedirectJson(props)
+    if (process.env.VERCEL !== '1' || process.env.NODE_ENV !== 'production') {
+      generateRedirectJson(props)
+    }
   }
 
   // 生成全文索引 - 仅在 yarn build 时执行 && process.env.npm_lifecycle_event === 'build'
