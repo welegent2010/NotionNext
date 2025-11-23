@@ -1,5 +1,10 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "headers": []
+  "headers": [],
+  "functions": {
+    "pages/**/*.js": {
+      "maxDuration": 60
+    }
+  }
 }
